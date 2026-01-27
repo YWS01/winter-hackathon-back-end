@@ -1,0 +1,16 @@
+meta {
+  name: Check host is reachable and server responds:
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8081/entries
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

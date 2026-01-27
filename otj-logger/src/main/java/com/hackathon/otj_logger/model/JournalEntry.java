@@ -1,18 +1,8 @@
 package com.hackathon.otj_logger.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.time.LocalDate;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "journal_entries")
@@ -24,24 +14,44 @@ public class JournalEntry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long id;
 
+    @Column(name = "ApprenticeID", nullable = true)
+    private Long apprenticeId;
+
+    @Column(name = "Title", nullable = false)
     private String title;
 
-    private String category;
-
-    @Column(length = 2000)
+    @Column(name = "Description", nullable = false, length = 2000)
     private String description;
 
-    private LocalDate date;
+    @Column(name = "Creation")
+    private LocalDateTime creation;
 
-    private Boolean offTheJob;
+    @Column(name = "LastUpdated")
+    private LocalDateTime lastUpdated;
 
-    private LocalDateTime createdAt;
+    @Column(name = "CheckedByCoachStatus")
+    private Integer checkedByCoachStatus;
 
-    // explicit getter to avoid IDE/compile problems when Lombok annotation processing is not enabled
-    public Long getId() {
-        return this.id;
+    @Column(name = "CheckedbyCoachID")
+    private Long checkedbyCoachId;
+
+    @Column(name = "CheckedbyCoachTime")
+    private LocalDateTime checkedbyCoachTime;
+
+    @Column(name = "CategoryID")
+    private Long categoryId;
+
+    @PrePersist
+    void onCreate() {
+        if (this.creation == null) this.creation = LocalDateTime.now();
+        if (this.lastUpdated == null) this.lastUpdated = this.creation;
     }
 
+    @PreUpdate
+    void onUpdate() {
+        this.lastUpdated = LocalDateTime.now();
+    }
 }

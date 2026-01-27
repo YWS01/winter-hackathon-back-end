@@ -1,6 +1,9 @@
+server:
+  port: 8081
+
 spring:
   datasource:
-    url: jdbc:h2:~/otjlogger;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE
+    url: jdbc:h2:~/otjlogger
     driver-class-name: org.h2.Driver
     username: sa
     password:

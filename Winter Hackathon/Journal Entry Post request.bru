@@ -1,0 +1,20 @@
+meta {
+  name: Journal Entry Post request
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8081/entries
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {"title":" NEW Completed workplace safety e‑learning","category":"Health & Safety","description":"Completed mandatory workplace safety e‑learning and updated my personal risk-assessment actions to reduce slip hazards in the workshop.","date":"2026-01-10","offTheJob":false}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
