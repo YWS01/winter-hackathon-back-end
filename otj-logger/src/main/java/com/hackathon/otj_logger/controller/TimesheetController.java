@@ -5,10 +5,13 @@ import com.hackathon.otj_logger.model.JournalEntry;
 import com.hackathon.otj_logger.model.Timesheet;
 import com.hackathon.otj_logger.repository.JournalEntryRepository;
 import com.hackathon.otj_logger.repository.TimesheetRepository;
+import com.hackathon.otj_logger.service.TimesheetNotifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,10 +22,12 @@ public class TimesheetController {
 
     private final TimesheetRepository repository;
     private final JournalEntryRepository journalRepository;
+    private final TimesheetNotifier notifier;
 
-    public TimesheetController(TimesheetRepository repository, JournalEntryRepository journalRepository) {
+    public TimesheetController(TimesheetRepository repository, JournalEntryRepository journalRepository, TimesheetNotifier notifier) {
         this.repository = repository;
         this.journalRepository = journalRepository;
+        this.notifier = notifier;
     }
 
     private TimesheetDTO toDto(Timesheet t) {
@@ -33,6 +38,20 @@ public class TimesheetController {
                 .endDate(t.getEndDate())
                 .apprenticeId(t.getJournalEntry() != null ? t.getJournalEntry().getApprenticeId() : null)
                 .build();
+
+        // compute-on-read: workedHours is computed from start/end (if end is null, compute until now)
+        Double worked = 0.0;
+        LocalDateTime s = t.getStartDate();
+        LocalDateTime e = t.getEndDate();
+        if (s != null) {
+            if (e != null) {
+                worked = Duration.between(s, e).toMinutes() / 60.0;
+            } else {
+                worked = Duration.between(s, LocalDateTime.now()).toMinutes() / 60.0;
+            }
+        }
+        dto.setWorkedHours(worked);
+
         return dto;
     }
 
@@ -69,7 +88,10 @@ public class TimesheetController {
                 .endDate(dto.getEndDate())
                 .build();
         Timesheet saved = repository.save(t);
-        return ResponseEntity.created(URI.create("/timesheets/" + saved.getId())).body(toDto(saved));
+        TimesheetDTO out = toDto(saved);
+        // notify clients about the new timesheet
+        notifier.notifyTimesheetChange(out, "created");
+        return ResponseEntity.created(URI.create("/timesheets/" + saved.getId())).body(out);
     }
 
     @PutMapping("/{id}")
@@ -91,7 +113,10 @@ public class TimesheetController {
         existing.setStartDate(dto.getStartDate());
         existing.setEndDate(dto.getEndDate());
         Timesheet saved = repository.save(existing);
-        return ResponseEntity.ok(toDto(saved));
+        TimesheetDTO out = toDto(saved);
+        // notify clients about the updated timesheet
+        notifier.notifyTimesheetChange(out, "updated");
+        return ResponseEntity.ok(out);
     }
 
     @DeleteMapping("/{id}")
@@ -100,6 +125,8 @@ public class TimesheetController {
             return ResponseEntity.notFound().build();
         }
         repository.deleteById(id);
+        // notify clients about the deleted timesheet (send only id and action)
+        notifier.notifyTimesheetChange(TimesheetDTO.builder().id(id).build(), "deleted");
         return ResponseEntity.noContent().build();
     }
 }

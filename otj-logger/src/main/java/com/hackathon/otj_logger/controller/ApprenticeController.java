@@ -2,6 +2,11 @@ package com.hackathon.otj_logger.controller;
 
 import com.hackathon.otj_logger.model.Apprentice;
 import com.hackathon.otj_logger.repository.ApprenticeRepository;
+import com.hackathon.otj_logger.service.HolidayService;
+import com.hackathon.otj_logger.dto.HolidayProjectionDTO;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +19,21 @@ import java.util.List;
 public class ApprenticeController {
 
     private final ApprenticeRepository repository;
+    private final HolidayService holidayService;
 
-    public ApprenticeController(ApprenticeRepository repository) {
+    public ApprenticeController(ApprenticeRepository repository, HolidayService holidayService) {
         this.repository = repository;
+        this.holidayService = holidayService;
+    }
+
+    @GetMapping("/{id}/holiday-projection")
+    public ResponseEntity<HolidayProjectionDTO> holidayProjection(
+            @PathVariable Long id,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end
+    ) {
+        HolidayProjectionDTO dto = holidayService.previewHolidayProjection(id, start, end);
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping
@@ -52,4 +69,3 @@ public class ApprenticeController {
         return ResponseEntity.noContent().build();
     }
 }
-

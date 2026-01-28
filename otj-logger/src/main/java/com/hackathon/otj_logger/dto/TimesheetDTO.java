@@ -13,5 +13,6 @@ public class TimesheetDTO {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private Long apprenticeId;
+    // computed on read: total worked hours for this timesheet entry
+    private Double workedHours;
 }
-
