@@ -14,21 +14,20 @@ public class Apprentice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
     private Long id;
 
-    @Column(name = "CoachID")
+    @Column(name = "COACHID")
     private Long coachId;
 
-    @Column(name = "Name")
+    @Column(name = "NAME")
     private String name;
 
-    @Column(name = "OTJWeeklyRate")
+    @Column(name = "OTJWEEKLY_RATE")
     private Integer otjWeeklyRate;
 
-    @Column(name = "CourseStartDate")
+    @Column(name = "COURSE_START_DATE")
     private LocalDate courseStartDate;
 
-    @Column(name = "CourseID")
+    @Column(name = "COURSEID")
     private Long courseId;
 }

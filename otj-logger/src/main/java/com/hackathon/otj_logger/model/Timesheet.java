@@ -14,19 +14,18 @@ public class Timesheet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
     private Long id;
 
     // Replace raw journalId with a JPA relationship to JournalEntry
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "JournalID", nullable = false)
+    @JoinColumn(name = "JOURNALID", nullable = false)
     private JournalEntry journalEntry;
 
-    @Column(name = "StartDate")
+    @Column(name = "START_DATE")
     private LocalDateTime startDate;
 
-    @Column(name = "EndDate")
+    @Column(name = "END_DATE")
     private LocalDateTime endDate;
 
-    // ApprenticeID removed — derive apprentice via the JournalEntry referenced by journalEntry
+    // If workedHours is required in code, add column WORKED_HOURS in DB or compute on the fly.
 }

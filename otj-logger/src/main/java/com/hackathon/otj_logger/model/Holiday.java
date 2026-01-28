@@ -13,15 +13,14 @@ public class Holiday {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
     private Long id;
 
-    @Column(name = "ApprenticeID", nullable = false)
+    @Column(name = "APPRENTICEID", nullable = false)
     private Long apprenticeId;
 
-    @Column(name = "HolidayDays")
+    @Column(name = "HOLIDAY_DAYS")
     private Integer holidayDays;
 
-    @Column(name = "HolidayMode")
+    @Column(name = "HOLIDAY_MODE")
     private Boolean holidayMode;
 }
