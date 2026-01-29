@@ -1,6 +1,7 @@
 package com.hackathon.otj_logger.config;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -73,6 +74,7 @@ public class GlobalExceptionHandler {
     }
 
     // Plain POJO used for error responses to avoid potential Lombok/annotation-processing issues during startup
+    @Schema(hidden = true)
     public static class ApiError {
         private LocalDateTime timestamp;
         private int status;
