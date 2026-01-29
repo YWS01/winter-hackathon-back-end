@@ -29,4 +29,21 @@ cd otj-logger
 ./mvnw spring-boot:run
 
 The app will start at:
-http://localhost:8080
+http://localhost:8081
+
+# Run backend (quick steps for a VS Code / FE dev)
+
+Prereqs:
+- Install JDK 17\+ (match `pom.xml` Java version).
+- Install Maven or use the bundled wrapper if present.
+
+Quick run (from repo root):
+```bash
+git clone https://github.com/YWS01/winter-hackathon-back-end.git
+cd winter-hackathon-back-end
+# build
+mvn -DskipTests package
+# run (or use the VS Code task)
+mvn spring-boot:run
+# or run packaged jar
+java -jar target/*.jar
