@@ -29,7 +29,7 @@ cd otj-logger
 ./mvnw spring-boot:run
 
 The app will start at:
-http://localhost:8081
+http://localhost:8081/h2-console/
 
 # Run backend (quick steps for a VS Code / FE dev)
 
