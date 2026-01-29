@@ -68,10 +68,12 @@ public class TimesheetController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TimesheetDTO> get(@PathVariable Long id) {
-        return repository.findById(id)
-                .map(this::toDto)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        java.util.Optional<Timesheet> opt = repository.findById(id);
+        if (opt.isPresent()) {
+            TimesheetDTO dto = toDto(opt.get());
+            return ResponseEntity.ok(dto);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
