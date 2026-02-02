@@ -31,19 +31,21 @@ cd otj-logger
 The app will start at:
 http://localhost:8081/h2-console/
 
-# Run backend (quick steps for a VS Code / FE dev)
+### Development H2 Console (demo only)
 
-Prereqs:
-- Install JDK 17\+ (match `pom.xml` Java version).
-- Install Maven or use the bundled wrapper if present.
+Open the H2 web console at: `http://localhost:8081/h2-console/`
 
-Quick run (from repo root):
-```bash
-git clone https://github.com/YWS01/winter-hackathon-back-end.git
-cd winter-hackathon-back-end
-# build
-mvn -DskipTests package
-# run (or use the VS Code task)
-mvn spring-boot:run
-# or run packaged jar
-java -jar target/*.jar
+- JDBC URL: `jdbc:h2:~/otjlogger`
+- User Name: `sa`
+- Password: (leave blank)
+
+> Note: These credentials are for local development 
+> 
+
+### Swagger UI
+
+You can explore the API using Swagger UI when the application is running locally:
+
+- Swagger UI: http://localhost:8081/swagger-ui/index.html#/
+
+Open the link in your browser (change the port if your server uses a different one).
